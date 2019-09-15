@@ -8,5 +8,6 @@ const loginCtrl = new LoginCtrl();
 // ===========================================
 
 router.post('/login',loginCtrl.login);
+router.post('/login/google',loginCtrl.loginGoogle);
 
 export default router;

@@ -2,7 +2,7 @@ import User, { IUser } from '../models/user';
 import { MongoError } from 'mongodb';
 
 // ========================================================================
-// Search Users
+// Search Users Regexp
 // ========================================================================
 
 export function searchUsers(regexp:RegExp) {

@@ -1,5 +1,5 @@
 import { Response, Request } from 'express';
-import { searchUsers } from '../classes/SearchCollections';
+import { searchUsers } from '../functions/SearchCollections';
 
 export default class SearchCtrl {
 

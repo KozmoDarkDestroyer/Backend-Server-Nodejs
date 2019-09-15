@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import mongoose from 'mongoose';
-import { searchUser } from '../classes/SearchCollections';
+import { searchUser } from '../functions/SearchCollections';
 import { uploadCollection } from '../middlewares/uploadCollection';
 
 export default class UploadCtrl {
@@ -14,7 +14,7 @@ export default class UploadCtrl {
         const size:number = 2500000;
         const table:string = req.params.table;
 
-        if (!mongoose.Types.ObjectId(id)) {
+        if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({
                 ok: false,
                 error: {

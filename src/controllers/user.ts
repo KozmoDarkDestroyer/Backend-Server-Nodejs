@@ -11,13 +11,14 @@ export default class UserCtrl {
     // ==========================================
 
     async getUsers(req:Request,res:Response){
-        const limit:number = Number(req.params.limit) || 10;
-        const skip:number = Number(req.params.skip) || 0;
+        const limit:number = Number(req.query.limit) || 10;
+        const skip:number = Number(req.query.skip) || 0;
 
         try {
-            const users:IUser[] = await User.find({ }, 'name email img role')
-                                            .skip(skip)                                    
-                                            .limit(limit);
+            const users:IUser[] = await User.find({ }, 'name email img_url role')                                    
+                                            .limit(limit)
+                                            .skip(skip)
+                                            .sort({ name: 1 })
             res.status(200).json({
                 ok: true,
                 users
@@ -39,7 +40,7 @@ export default class UserCtrl {
     async getUser(req:Request,res:Response){
         const id:string = String(req.params.id);
 
-        if (!mongoose.Types.ObjectId(id)) {
+        if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({
                 ok: false,
                 error: {
@@ -85,7 +86,6 @@ export default class UserCtrl {
             name: model.name,
             email: model.email,
             password: bcrypt.hashSync(model.password,10),
-            img: model.img_url,
             role: model.role
         });
 
@@ -113,7 +113,7 @@ export default class UserCtrl {
         const id:string = req.params.id;
         const model:IUser = req.body;
 
-        if (!mongoose.Types.ObjectId(id)) {
+        if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({
                 ok: false,
                 error: {
@@ -137,7 +137,6 @@ export default class UserCtrl {
             try {
                 user.name = model.name;
                 user.password = bcrypt.hashSync(model.password,10);
-                user.role = model.role;
 
                 await user.save();
 
@@ -170,7 +169,7 @@ export default class UserCtrl {
     async deleteUser(req:Request,res:Response){
         const id:string = req.params.id;
 
-        if (!mongoose.Types.ObjectId(id)) {
+        if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({
                 ok: false,
                 error: {

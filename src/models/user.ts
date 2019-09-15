@@ -7,7 +7,8 @@ export interface IUser extends Document {
     password: string,
     img_url:string,
     role: string,
-    id_img_url:string
+    id_img_url:string,
+    google:boolean
 };
 
 export interface ILogin extends Document {
@@ -36,7 +37,6 @@ let user = new Schema({
     },
     role: {
         type: String,
-        required: true,
         default: 'USER',
         enum: validRoles
     },
@@ -47,6 +47,10 @@ let user = new Schema({
     id_img_url: {
         type: String,
         required: false
+    },
+    google: {
+        type: Boolean,
+        default: false
     }
 });
 
@@ -54,6 +58,13 @@ user.methods.toJSON = function() {
     let user = this;
     let userObject = user.toObject();
     delete userObject.password;
+    return userObject;
+};
+
+user.methods.toJSON = function() {
+    let user = this;
+    let userObject = user.toObject();
+    delete userObject.id_img_url;
     return userObject;
 };
 

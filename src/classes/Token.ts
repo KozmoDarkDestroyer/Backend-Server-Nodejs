@@ -16,7 +16,6 @@ export default class Token {
         }
         const token = jwt.sign(payload,config.secretKey,{  expiresIn: config.tokenExpiration });
         return {
-            payload,
             token
         };
     }
