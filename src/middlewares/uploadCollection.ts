@@ -20,7 +20,7 @@ export function uploadCollection(model:any,req:Request,res:Response,size:number)
             });
         }
         else{
-            Cloudinary.deleteCloudinary(model.id_img_url);
+            Cloudinary.deleteCloudinary(model.id_img);
             Cloudinary.uploadCloudinary(req.file.path,(err:any,result:any) => {
                 if (err) {
                     multer.deleteFile(imgPath,req.file.filename);
@@ -32,13 +32,13 @@ export function uploadCollection(model:any,req:Request,res:Response,size:number)
                     })
                 }
                 else{
-                    model.id_img_url = result.public_id;
-                    model.img_url = result.secure_url;
+                    model.id_img = result.public_id;
+                    model.img = result.secure_url;
 
                     model.save((err:MongoError,modelSave:any) => {
                         if (err) {
                             multer.deleteFile(imgPath,req.file.filename);
-                            Cloudinary.deleteCloudinary(model.id_img_url);
+                            Cloudinary.deleteCloudinary(model.id_img);
                             return res.status(500).json({
                                 ok: false,
                                 err: {

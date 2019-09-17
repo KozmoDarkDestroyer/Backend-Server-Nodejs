@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
 import Cloudinary from '../classes/Cloudinary';
@@ -10,19 +10,25 @@ export default class UserCtrl {
     // Get all users
     // ==========================================
 
-    async getUsers(req:Request,res:Response){
-        const limit:number = Number(req.query.limit) || 10;
-        const skip:number = Number(req.query.skip) || 0;
+    async getUsers(req:Request,res:Response,next:NextFunction){
+        let perPage = Number(req.params.perpage || 5);
+        let page = Number(req.params.page || 1);
 
         try {
-            const users:IUser[] = await User.find({ }, 'name email img_url role')                                    
-                                            .limit(limit)
-                                            .skip(skip)
+            const users:IUser[] = await User.find({ }, 'name email img role google')                                    
+                                            .skip((perPage * page) - perPage)
+                                            .limit(perPage)
                                             .sort({ name: 1 })
-            res.status(200).json({
-                ok: true,
-                users
-            });
+
+            User.countDocuments((err:any,count:any) => {
+                if (err) return next(err);
+                res.status(200).json({
+                    ok: true,
+                    users,
+                    pages: Math.ceil(count/perPage),
+                    count
+                });
+            })
 
         } catch (error) {
             return res.status(500).json({
@@ -136,7 +142,14 @@ export default class UserCtrl {
 
             try {
                 user.name = model.name;
-                user.password = bcrypt.hashSync(model.password,10);
+
+                if (model.role === null) {
+                    user.role = user.role;
+                    user.password = bcrypt.hashSync(model.password,10);
+                }
+                else{
+                    user.role = model.role;
+                }
 
                 await user.save();
 
@@ -194,7 +207,7 @@ export default class UserCtrl {
                 user
             });
 
-            await Cloudinary.deleteCloudinary(user.id_img_url);
+            await Cloudinary.deleteCloudinary(user.id_img);
 
         } catch (error) {
             return res.status(500).json({

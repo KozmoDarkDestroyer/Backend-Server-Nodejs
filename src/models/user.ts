@@ -5,9 +5,9 @@ export interface IUser extends Document {
     name: string,
     email: string,
     password: string,
-    img_url:string,
+    img:string,
     role: string,
-    id_img_url:string,
+    id_img:string,
     google:boolean
 };
 
@@ -40,11 +40,11 @@ let user = new Schema({
         default: 'USER',
         enum: validRoles
     },
-    img_url: {
+    img: {
         type: String,
         required: false
     },
-    id_img_url: {
+    id_img: {
         type: String,
         required: false
     },
@@ -58,12 +58,6 @@ user.methods.toJSON = function() {
     let user = this;
     let userObject = user.toObject();
     delete userObject.password;
-    return userObject;
-};
-
-user.methods.toJSON = function() {
-    let user = this;
-    let userObject = user.toObject();
     delete userObject.id_img_url;
     return userObject;
 };

@@ -97,7 +97,7 @@ export default class loginCtrl {
                     const user:IUser = new User({
                         name: payload.name,
                         email: payload.email,
-                        img_url: payload.img_url,
+                        img: payload.img_url,
                         role: 'USER',
                         password: bcrypt.hashSync('no-password',10),
                         google: payload.google

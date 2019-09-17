@@ -8,7 +8,7 @@ const userCtrl = new UserCtrl();
 // Routes && Controllers
 // ===========================================
 
-router.get('/users', verifyToken,verifyUser,userCtrl.getUsers);
+router.get('/users/:page/:perpage', verifyToken,verifyUser,userCtrl.getUsers);
 router.get('/user/:id',verifyToken,verifyUser,userCtrl.getUser);
 router.post('/user',userCtrl.createUser);
 router.put('/user/:id',verifyToken,verifyUser,userCtrl.putUser);

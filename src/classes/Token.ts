@@ -15,9 +15,7 @@ export default class Token {
             role: user.role
         }
         const token = jwt.sign(payload,config.secretKey,{  expiresIn: config.tokenExpiration });
-        return {
-            token
-        };
+        return token;
     }
 
     // ==========================================

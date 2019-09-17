@@ -8,6 +8,6 @@ const uploadCtrl = new UploadCtrl();
 // Routes && Controllers
 // ========================================================================
 
-router.put('/upload/:table/:id',verifyToken,verifyUser,uploadCtrl.uploadImage);
+router.put('/upload/:table/:id',uploadCtrl.uploadImage);
 
 export default router;
